@@ -16,7 +16,7 @@ const dogSchema: Schema = new Schema({
 });
 
 
-const DogModel = mongoose.model<Dog>('DogModel', dogSchema);
+const DogModel = mongoose.model<Dog>('Dog', dogSchema);
 
 
 export default DogModel;
