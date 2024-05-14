@@ -16,6 +16,7 @@ const app: Application = express();
 const port = process.env.PORT || 8000;
 dotenv.config();
 
+console.log(process.env);
 
 if (!process.env.MONGO_URI){
     console.log("missing uri");
