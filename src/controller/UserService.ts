@@ -42,10 +42,15 @@ export class UserService {
                 return res.status(401).json({ message: 'No account with this username' });
             }
 
-            const secretKey: string | undefined = process.env.JWT_SECRET;
+            if (!process.env.JWT_SECRET){
+                console.log("missing secret key");
+                process.exit(1);
+            }
+
+            const secretKey = process.env.JWT_SECRET;
 
             // If the password is valid, generate a JWT token
-            const token = jwt.sign({ userId: user._id }, 'abc1def2ghi3', { expiresIn: '1h' });
+            const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
 
             // Send the token in the response
             res.status(200).json({ token });

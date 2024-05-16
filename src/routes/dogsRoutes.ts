@@ -51,6 +51,8 @@ router.get('/dogs/filter/pagination/:name',verifyToken,  dogService.filterDogsBy
 
 router.get('/dogs/consultation/:id', dogService.getConsultationsForDog);
 
+router.get('/dogs/:id/consultations', verifyToken, dogService.getConsultationsForDogPaginated);
+
 
 
 

@@ -238,6 +238,42 @@ export class DogService {
     };
 
 
+    getConsultationsForDogPaginated = async (req: Request, res: Response) => {
+        console.log("we are in the getConsultationsForDogPaginated");
+        const id: number = parseInt(req.params.id);
+        const dog = await this.dogRepository.getDogById(id);
+
+        if (!dog) {
+            return res.status(404).json({ message: 'Dog not found' });
+        }
+
+        try {
+            const stringId = dog._id.toString();
+            console.log("stringId dog: " + stringId);
+
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const skip = (page - 1) * limit;
+
+            const consultations = await ConsultationModel.find({ dogId: stringId })
+                .skip(skip)
+                .limit(limit);
+
+            const totalConsultations = await ConsultationModel.countDocuments({ dogId: stringId });
+
+            res.json({
+                consultations,
+                totalPages: Math.ceil(totalConsultations / limit),
+                currentPage: page,
+                totalConsultations
+            });
+        } catch (error) {
+            console.error('Error fetching consultations for dog:', error);
+            res.status(500).json({ message: 'Failed to fetch consultations for dog' });
+        }
+    };
+
+
 
     /*filterDogsByAge = (req: Request, res: Response) => {
         const age = req.params.age;
